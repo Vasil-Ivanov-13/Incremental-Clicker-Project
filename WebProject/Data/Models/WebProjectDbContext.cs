@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebProject.Data.Models;
-namespace WebProject.Data
+namespace WebProject.Data.Models
 {
     public class WebProjectDbContext : DbContext
     {

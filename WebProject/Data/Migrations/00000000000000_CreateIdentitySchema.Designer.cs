@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
-using WebProject.Data;
+using WebProject.Data.Models;
 
 namespace WebProject.Data.Migrations
 {

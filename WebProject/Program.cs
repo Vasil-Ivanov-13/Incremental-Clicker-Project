@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using WebProject.Data;
+using WebProject.Data.Models;
 
 namespace WebProject
 {
@@ -15,7 +15,7 @@ namespace WebProject
             builder.Services.AddDbContext<WebProjectDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+      
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<WebProjectDbContext>();
             builder.Services.AddControllersWithViews();
