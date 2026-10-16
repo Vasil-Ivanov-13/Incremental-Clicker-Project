@@ -238,71 +238,49 @@ namespace WebProject.Data.Migrations
                     b.Property<int>("Hitpoints")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsAlive")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Level")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Enemies");
-                });
 
-            modelBuilder.Entity("WebProject.Data.Models.Inventory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerGold")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayerId")
-                        .IsUnique();
-
-                    b.ToTable("Inventories");
-                });
-
-            modelBuilder.Entity("WebProject.Data.Models.Item", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("InventoryId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("LevelMultiplier")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<int>("Price")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ShopId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InventoryId");
-
-                    b.HasIndex("ShopId");
-
-                    b.ToTable("Items");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DamagePoints = 2,
+                            Hitpoints = 10,
+                            IsAlive = true,
+                            Level = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DamagePoints = 3,
+                            Hitpoints = 15,
+                            IsAlive = true,
+                            Level = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DamagePoints = 4,
+                            Hitpoints = 20,
+                            IsAlive = true,
+                            Level = 3
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DamagePoints = 5,
+                            Hitpoints = 40,
+                            IsAlive = true,
+                            Level = 4
+                        });
                 });
 
             modelBuilder.Entity("WebProject.Data.Models.Player", b =>
@@ -319,9 +297,6 @@ namespace WebProject.Data.Migrations
                     b.Property<int>("DamagePoints")
                         .HasColumnType("int");
 
-                    b.Property<int>("ExperiencePoints")
-                        .HasColumnType("int");
-
                     b.Property<int>("Hitpoints")
                         .HasColumnType("int");
 
@@ -336,28 +311,21 @@ namespace WebProject.Data.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<int>("TalentPoints")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Players");
-                });
 
-            modelBuilder.Entity("WebProject.Data.Models.Shop", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ItemId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Shops");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CharacterType = 0,
+                            DamagePoints = 4,
+                            Hitpoints = 30,
+                            IsAlive = true,
+                            Level = 1,
+                            Name = "JohnTestSouls"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -409,48 +377,6 @@ namespace WebProject.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("WebProject.Data.Models.Inventory", b =>
-                {
-                    b.HasOne("WebProject.Data.Models.Player", "Player")
-                        .WithOne("Inventory")
-                        .HasForeignKey("WebProject.Data.Models.Inventory", "PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Player");
-                });
-
-            modelBuilder.Entity("WebProject.Data.Models.Item", b =>
-                {
-                    b.HasOne("WebProject.Data.Models.Inventory", "Inventory")
-                        .WithMany("Items")
-                        .HasForeignKey("InventoryId");
-
-                    b.HasOne("WebProject.Data.Models.Shop", "Shop")
-                        .WithMany("Items")
-                        .HasForeignKey("ShopId");
-
-                    b.Navigation("Inventory");
-
-                    b.Navigation("Shop");
-                });
-
-            modelBuilder.Entity("WebProject.Data.Models.Inventory", b =>
-                {
-                    b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("WebProject.Data.Models.Player", b =>
-                {
-                    b.Navigation("Inventory")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("WebProject.Data.Models.Shop", b =>
-                {
-                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }

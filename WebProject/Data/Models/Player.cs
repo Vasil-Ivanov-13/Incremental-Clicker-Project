@@ -26,21 +26,15 @@ public class Player
     [Required]
     public int Level { get; set; } = 1;
 
-    [Required]
 
-    public int ExperiencePoints { get; set; } = 0;
 
     [Required]
 
     public bool IsAlive { get; set; } = true;
 
-    [Required]
+ 
 
-    public int TalentPoints { get; set; } = 0;
 
-    [Required]
-
-    public virtual Inventory Inventory { get; set; } = null!;
 
 
 

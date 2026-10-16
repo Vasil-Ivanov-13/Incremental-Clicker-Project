@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using WebProject.Data.Configurations;
 namespace WebProject.Data.Models
 {
-    public class WebProjectDbContext : IdentityDbContext <IdentityUser>
+    public class WebProjectDbContext : IdentityDbContext<IdentityUser>
     {
         public WebProjectDbContext(DbContextOptions<WebProjectDbContext> options)
             : base(options)
@@ -13,15 +14,15 @@ namespace WebProject.Data.Models
 
         public virtual DbSet<Player> Players { get; set; } = null!;
 
-        public virtual DbSet<Inventory> Inventories { get; set; } = null!;
+        // public virtual DbSet<Inventory> Inventories { get; set; } = null!;
 
-        public virtual DbSet<Item> Items { get; set; } = null!;
+        // public virtual DbSet<Item> Items { get; set; } = null!;
 
-        public virtual DbSet<Shop> Shops { get; set; } = null!;
+        //public virtual DbSet<Shop> Shops { get; set; } = null!;
 
         public virtual DbSet<Enemy> Enemies { get; set; } = null!;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        /*protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             base.OnModelCreating(modelBuilder);
@@ -36,8 +37,16 @@ namespace WebProject.Data.Models
 
         
 
+        */
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
 
+            modelBuilder.ApplyConfiguration(new PlayerConfiguration());
+            modelBuilder.ApplyConfiguration(new EnemyConfiguration());
 
+
+        }
     }
 }
