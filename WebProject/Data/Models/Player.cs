@@ -26,6 +26,9 @@ public class Player
     [Required]
     public int Level { get; set; } = 1;
 
+    [Required]
+    public int Experience { get; set; } = 0;
+
 
 
     [Required]
