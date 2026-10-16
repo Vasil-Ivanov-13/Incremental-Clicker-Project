@@ -11,20 +11,18 @@ namespace WebProject.Data.Models
         /*Add item stats */
 
         [Required]
+        public double LevelMultiplier { get; set; } = 1.8;
+
+        [Required]
         [MaxLength(30)]
         public string Name { get; set; } = null!;
 
         [Required]
-        public int Price { get; set; }
+        public int Price { get; set; }    
 
-        /*Add objects for shop and player inventory */
-
-        
         [ForeignKey(nameof(Shop))]
         public int? ShopId { get; set; }
-
-        
-        public virtual Shop Shop { get; set; } = null!;
+        public virtual Shop? Shop { get; set; }
 
 
         [ForeignKey(nameof(Inventory))]

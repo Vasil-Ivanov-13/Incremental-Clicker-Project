@@ -14,9 +14,11 @@ namespace WebProject.Data.Models
 
         [Required]
         [ForeignKey(nameof(Player))]
-        public int PlayerId { get; set; } 
+        public int PlayerId { get; set; }
 
+        [ForeignKey(nameof(Item))]
         
+        public int? ItemId { get; set; }
         public virtual ICollection<Item> Items { get; set; } = new List<Item>();
 
 

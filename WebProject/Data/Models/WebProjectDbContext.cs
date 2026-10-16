@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace WebProject.Data.Models
 {
-    public class WebProjectDbContext : DbContext
+    public class WebProjectDbContext : IdentityDbContext <IdentityUser>
     {
         public WebProjectDbContext(DbContextOptions<WebProjectDbContext> options)
             : base(options)
@@ -30,7 +31,7 @@ namespace WebProject.Data.Models
                 .WithOne(a => a.Player)
                 .HasForeignKey<Inventory>(e => e.PlayerId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         

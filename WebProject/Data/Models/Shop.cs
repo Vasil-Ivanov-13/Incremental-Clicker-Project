@@ -12,7 +12,8 @@ namespace WebProject.Data.Models
                 [ForeignKey(nameof(Items))]
                 public int itemId { get; set; }
                 */
-        
+        [ForeignKey(nameof(Item))]
+        public int? ItemId { get; set; }
         public virtual ICollection<Item> Items { get; set; } = new List<Item>();
     }
 }
