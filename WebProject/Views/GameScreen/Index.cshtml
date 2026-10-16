@@ -3,5 +3,9 @@
 
 *@
 @{
-    <button type="submit" class="btn btn-danger">Combat</button>
+    @using (Html.BeginForm("Combat", "GameScreen", FormMethod.Post)) 
+    {
+        <button type="submit" class="btn btn-danger">Combat</button>
+    }  
+   
 }
