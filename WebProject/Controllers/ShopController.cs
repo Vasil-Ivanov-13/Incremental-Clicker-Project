@@ -25,7 +25,11 @@ namespace WebProject.Controllers
         Is that a good approach? Add Inventory model with list of item slots. Relation to player with id fk, 1-1. 
         But then the calculations get more complicated from model to model.
         */
-
+        public IActionResult CraftItem()
+        {
+            
+            return View();
+        }
 
     }
 }

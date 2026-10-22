@@ -23,28 +23,121 @@ namespace WebProject.Services
          */
         public List<string> CombatLoop()
         {
+            //List of strings to be represented in the view, something like a combat log.
             List<string> resultStringList = new List<string>();
-            //Player stats
-            int playerHitpoints = dbContext.Players.First().Hitpoints;
-            int playerDamage = dbContext.Players.First().DamagePoints;
-            string playerName = dbContext.Players.First().Name;
-            int playerExperience = dbContext.Players.First().Experience;
-
-            int playerGold = dbContext.Players.First().Gold;
-            int playerLevel = dbContext.Players.First().Level;
 
 
-            //Enemy stats , if enemy is returned null crashes. TO FIX.
-            int? enemyId = dbContext.Enemies.Where(e => e.IsAlive).OrderBy(e => e.Id).FirstOrDefault().Id;
+
+            
             
 
             //check if there is an enemy at all.
-            if (enemyId == null)
+            if (dbContext.Enemies.Any(e => e.IsAlive))
             {
-                resultStringList.Add("No enemy available for combat. Going deeper...");
-                foreach (var enemy in dbContext.Enemies)
+                //Get Ids of current participants in combat.
+                int enemyId = dbContext.Enemies.Where(e => e.IsAlive).OrderByDescending(e => e.Id).First().Id;
+                int playerId = dbContext.Players.First().Id;
+
+                //Player stats start
+
+
+                //Find a better way to find player id, probably will come with Identity. TODO
+                Player currentPlayer = dbContext.Players.FirstOrDefault(p => p.Id == playerId);
+                
+                int playerHitpoints = currentPlayer.Hitpoints;
+                
+                int playerDamage = currentPlayer.DamagePoints;
+                
+                string playerName = currentPlayer.Name;
+              // are these variables needed in the loop at all?  
+                int playerExperience = currentPlayer.Experience;
+              // 
+              //  int playerGold = currentPlayer.Gold;
+              //  
+                int playerLevel = currentPlayer.Level;
+
+                //Player stats end
+
+                //Enemy stats start
+
+                Enemy currentEnemy = dbContext.Enemies.FirstOrDefault(e => e.Id == enemyId);
+                
+                int enemyHitpoints = currentEnemy.Hitpoints;
+                
+                int enemyLevel = currentEnemy.Level;
+                
+                int enemyDamage = currentEnemy.DamagePoints;
+
+                //Enemy stats end
+
+                //Combat loop start
+
+                while (true)
                 {
-                    enemy.IsAlive = true;
+
+                    enemyHitpoints -= playerDamage;
+                    resultStringList.Add($"Enemy was dealt {playerDamage} damage by {playerName}.");
+
+                    if (enemyHitpoints <= 0)
+                    {
+                        //enemy dead, add xp, gold, loot, etc
+
+                        currentEnemy.IsAlive = false;
+
+
+                        currentPlayer.Experience += (enemyLevel * 3);
+                        playerExperience += (enemyLevel * 3); // updating local 
+
+                        currentPlayer.Gold += (enemyLevel * 10);
+
+                        if (currentPlayer.Experience >= currentPlayer.Level * 10)
+                        {
+                            currentPlayer.Level += 1;
+                            playerLevel += 1; // updating local
+                            currentPlayer.Hitpoints += 10 * playerLevel;
+                            currentPlayer.DamagePoints += 1 * playerLevel;
+
+                            resultStringList.Add($"Foe vanquished!");
+                            resultStringList.Add($"{playerName} leveled up to level {playerLevel}!");
+                            resultStringList.Add($"{playerName}'s stats increased!");
+
+
+
+                        }
+
+                        dbContext.SaveChanges();
+
+                        return resultStringList;
+
+                    }
+
+                    playerHitpoints -= enemyDamage;
+                    resultStringList.Add($"{playerName} was dealt {enemyDamage} damage by the enemy.");
+                    if (playerHitpoints <= 0)
+                    {
+                        dbContext.Players.First().Gold += (enemyLevel * 5);
+                        resultStringList.Add($"{playerName} managed to escape.");
+                        //player dead, less gold, no xp, message
+                        return resultStringList;
+                    }
+
+
+
+                }
+
+                //Combat loop end
+
+            }
+            else
+            {
+                //Going deeper would mean adding another enemy to the list.
+                //That will happen with random class after some balancing math is done.Not urgent.
+                //Enemy stats will be generated based on enemy level.
+                resultStringList.Add("No enemy available for combat. Going deeper...");
+                foreach (Enemy e in dbContext.Enemies)
+                {
+                    e.IsAlive = true;
+                    e.Level += 1;
                 }
 
                 dbContext.SaveChanges();
@@ -52,63 +145,16 @@ namespace WebProject.Services
                 return resultStringList;
             }
 
-            int enemyHitpoints = dbContext.Enemies.Where(e => e.Id == enemyId).Select(e => e.Hitpoints).FirstOrDefault();
-            int enemyLevel = dbContext.Enemies.Where(e => e.Id == enemyId).OrderBy(e => e.Id).FirstOrDefault().Level;
-            int enemyDamage = dbContext.Enemies.Where(e => e.Id == enemyId).Select(e => e.DamagePoints).FirstOrDefault();
+
+
+            
+           
+
+            
 
 
 
-            while (true)
-            {
-
-                enemyHitpoints -= playerDamage;
-                resultStringList.Add($"Enemy was dealt {playerDamage} damage by {playerName}.");
-
-                if (enemyHitpoints <= 0)
-                {
-                    //enemy dead, add xp, gold, loot, etc
-
-                    dbContext.Enemies.Where(e => e.IsAlive).OrderBy(e => e.Id).FirstOrDefault().IsAlive = false;
-                    
-
-                    dbContext.Players.First().Experience += (enemyLevel * 5);
-                    playerExperience += (enemyLevel * 5); // updating local 
-
-                    dbContext.Players.First().Gold += (enemyLevel * 10);
-
-                    if(playerExperience >= playerLevel * 10)
-                    {
-                        dbContext.Players.First().Level += 1;
-                        dbContext.Players.First().Hitpoints += 10 * playerLevel;
-                        dbContext.Players.First().DamagePoints += 1 * playerLevel;
-
-                        resultStringList.Add($"Foe vanquished!");
-                        resultStringList.Add($"{playerName} leveled up to level {playerLevel + 1}!");
-                        resultStringList.Add($"{playerName}'s stats increased!");
-                        
-
-
-                    }
-
-                    dbContext.SaveChanges();
-
-                    return resultStringList;
-                    
-                }
-
-                playerHitpoints -= enemyDamage;
-                resultStringList.Add($"{playerName} was dealt {enemyDamage} damage by the enemy.");
-                if (playerHitpoints <= 0)
-                {
-                    dbContext.Players.First().Gold += (enemyLevel * 5);
-                    resultStringList.Add($"{playerName} managed to escape.");
-                    //player dead, less gold, no xp, message
-                    return resultStringList;
-                }
-             
-                
-
-            }
+            
         }
 
       

@@ -33,12 +33,13 @@ public class Player
     public int Gold { get; set; } = 0;
 
     [Required]
-
+    //is this used?
     public bool IsAlive { get; set; } = true;
 
     public virtual ICollection<Item> Items { get; set; } = new List<Item>();
 
- 
+    public int? WeaponId { get; set; }
+    public int? ArmorId { get; set; }
 
 
 
