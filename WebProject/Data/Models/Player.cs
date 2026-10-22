@@ -29,11 +29,14 @@ public class Player
     [Required]
     public int Experience { get; set; } = 0;
 
-
+    [Required]
+    public int Gold { get; set; } = 0;
 
     [Required]
 
     public bool IsAlive { get; set; } = true;
+
+    public virtual ICollection<Item> Items { get; set; } = new List<Item>();
 
  
 

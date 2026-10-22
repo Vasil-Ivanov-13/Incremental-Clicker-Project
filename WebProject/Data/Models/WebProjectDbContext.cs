@@ -38,6 +38,8 @@ namespace WebProject.Data.Models
         
 
         */
+
+        public virtual DbSet<Item> Items { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

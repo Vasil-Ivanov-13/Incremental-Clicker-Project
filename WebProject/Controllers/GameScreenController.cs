@@ -2,15 +2,18 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using WebProject.Data.Models;
+using WebProject.Services;
 
 namespace WebProject.Controllers
 {
     public class GameScreenController : Controller
     {
-        private readonly WebProjectDbContext _context;
+        private readonly WebProjectDbContext dbContext;
+        private readonly ICombat _combat;
         public GameScreenController(WebProjectDbContext context)
         {
-            _context = context; 
+            dbContext = context;
+            
         }
         
         public IActionResult Index()
@@ -20,48 +23,9 @@ namespace WebProject.Controllers
 
         public IActionResult Combat()
         {
-           /* Random random = new Random(); 
-            * 
-            * ADD rng to combat utilising dice rolls using str stat?
-            
-            */
-           
-            int playerHitpoints = _context.Players.First().Hitpoints;
-            int? enemyHitpoints = _context.Enemies.Where(e => e.IsAlive).FirstOrDefault().Hitpoints;
-            int playerDamage = _context.Players.First().DamagePoints;
-            int enemyDamage = _context.Enemies.Where(e => e.IsAlive).OrderBy(e => e.Id).FirstOrDefault().DamagePoints;
-            string viewMessage = string.Empty;
-
-            if (enemyHitpoints == null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-
-
-            while (playerHitpoints > 0 && enemyHitpoints > 0)
-            {
-                
-                enemyHitpoints -= playerDamage;
-                
-                if(enemyHitpoints <= 0)
-                {
-                    //enemy dead, add xp, gold, loot, etc
-                    viewMessage = "Player won";
-                    _context.Enemies.Where(e => e.IsAlive).OrderBy(e => e.Id).FirstOrDefault().IsAlive = false;
-                    _context.SaveChanges();
-                    break;
-                }
-
-                playerHitpoints -= enemyDamage;
-                if(playerHitpoints <= 0)
-                {
-                    viewMessage = "Enemy won";
-                    //player dead, less gold, no xp, message
-                    
-                }
-            }
-           // ViewData["Message"] = viewMessage;
+            new CombatMode(dbContext).CombatLoop();
+            // add an endless enemy generation loop, where dead enemies level up and a new enemy is generated
+            //when the enemy list ends.
 
             return RedirectToAction("Index");
         }

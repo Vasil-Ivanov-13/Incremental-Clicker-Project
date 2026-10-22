@@ -283,6 +283,38 @@ namespace WebProject.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("WebProject.Data.Models.Item", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("CritModifier")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("DamagePoints")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HealthPoints")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("Items");
+                });
+
             modelBuilder.Entity("WebProject.Data.Models.Player", b =>
                 {
                     b.Property<int>("Id")
@@ -295,6 +327,12 @@ namespace WebProject.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("DamagePoints")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Experience")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Gold")
                         .HasColumnType("int");
 
                     b.Property<int>("Hitpoints")
@@ -320,8 +358,10 @@ namespace WebProject.Data.Migrations
                         {
                             Id = 1,
                             CharacterType = 0,
-                            DamagePoints = 4,
-                            Hitpoints = 30,
+                            DamagePoints = 5,
+                            Experience = 0,
+                            Gold = 0,
+                            Hitpoints = 50,
                             IsAlive = true,
                             Level = 1,
                             Name = "JohnTestSouls"
@@ -377,6 +417,22 @@ namespace WebProject.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("WebProject.Data.Models.Item", b =>
+                {
+                    b.HasOne("WebProject.Data.Models.Player", "Player")
+                        .WithMany("Items")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
+                });
+
+            modelBuilder.Entity("WebProject.Data.Models.Player", b =>
+                {
+                    b.Navigation("Items");
                 });
 #pragma warning restore 612, 618
         }
