@@ -16,11 +16,11 @@ namespace WebProject.Data.Configurations
                     Name = "JohnTestSouls",
                     CharacterType = ClassEnums.Basic,
                     Hitpoints = 50,
-                    DamagePoints = 5,
+                    Strength = 1,
                     Level = 1,
                     Gold = 0,
                     Experience = 0,
-                    IsAlive = true
+                    
                 }
                 );
         }

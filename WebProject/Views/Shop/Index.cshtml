@@ -2,8 +2,20 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    @using (Html.BeginForm("CraftItem", "Shop", FormMethod.Post))
+    @using (Html.BeginForm("CraftItem1", "Shop", FormMethod.Post))
     {
-        <button type="submit" class="btn btn">Craft Item</button>
+        <button type="submit" class="btn btn">Craft Weapon</button>
+    }
+    using (Html.BeginForm("CraftItem2", "Shop", FormMethod.Post))
+    {
+        <button type="submit" class="btn btn">Craft Armor</button>
+    }
+    using (Html.BeginForm("UpgradeDamage", "Shop", FormMethod.Post))
+    {
+        <button type="submit" class="btn btn">Buy Damage</button>
+    }
+    using (Html.BeginForm("UpgradeHealth", "Shop", FormMethod.Post))
+    {
+        <button type="submit" class="btn btn">Buy Health</button>
     }
 }

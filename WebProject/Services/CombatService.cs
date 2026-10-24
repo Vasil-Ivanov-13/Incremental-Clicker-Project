@@ -4,12 +4,14 @@ using WebProject.Data.Models;
 
 namespace WebProject.Services
 {
-    public class CombatMode : ICombat
+    public class CombatService 
     {
         private readonly WebProjectDbContext dbContext;
-        public CombatMode(WebProjectDbContext context)
+        
+        public CombatService(WebProjectDbContext context)
         {
             this.dbContext = context;
+
         }
 
 
@@ -45,8 +47,9 @@ namespace WebProject.Services
                 Player currentPlayer = dbContext.Players.FirstOrDefault(p => p.Id == playerId);
                 
                 int playerHitpoints = currentPlayer.Hitpoints;
-                
-                int playerDamage = currentPlayer.DamagePoints;
+
+                int playerDamage = 0;
+
                 
                 string playerName = currentPlayer.Name;
               // are these variables needed in the loop at all?  
@@ -74,9 +77,17 @@ namespace WebProject.Services
 
                 while (true)
                 {
-
+                    // Dice Rolls for player strength to determine player damage. 
+                    //TODO add item calculations!
+                    for (int i = 0; i <= currentPlayer.Strength; i++)
+                    {
+                        
+                        playerDamage += Random.Shared.Next(1,7);
+                    }
                     enemyHitpoints -= playerDamage;
                     resultStringList.Add($"Enemy was dealt {playerDamage} damage by {playerName}.");
+                    //resetting player damage so new dice rolls can be clean.
+                    playerDamage = 0;
 
                     if (enemyHitpoints <= 0)
                     {
@@ -95,13 +106,13 @@ namespace WebProject.Services
                             currentPlayer.Level += 1;
                             playerLevel += 1; // updating local
                             currentPlayer.Hitpoints += 10 * playerLevel;
-                            currentPlayer.DamagePoints += 1 * playerLevel;
+                            
 
                             resultStringList.Add($"Foe vanquished!");
                             resultStringList.Add($"{playerName} leveled up to level {playerLevel}!");
                             resultStringList.Add($"{playerName}'s stats increased!");
 
-
+                            currentPlayer.Experience = 0;
 
                         }
 
@@ -115,6 +126,7 @@ namespace WebProject.Services
                     resultStringList.Add($"{playerName} was dealt {enemyDamage} damage by the enemy.");
                     if (playerHitpoints <= 0)
                     {
+                        resultStringList.Add($"{playerName} was nearly killed...");
                         dbContext.Players.First().Gold += (enemyLevel * 5);
                         resultStringList.Add($"{playerName} managed to escape.");
                         //player dead, less gold, no xp, message

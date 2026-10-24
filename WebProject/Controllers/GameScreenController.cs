@@ -9,7 +9,7 @@ namespace WebProject.Controllers
     public class GameScreenController : Controller
     {
         private readonly WebProjectDbContext dbContext;
-        private readonly ICombat _combat;
+        
         public GameScreenController(WebProjectDbContext context)
         {
             dbContext = context;
@@ -23,7 +23,7 @@ namespace WebProject.Controllers
 
         public IActionResult Combat()
         {
-            new CombatMode(dbContext).CombatLoop();
+            new CombatService(dbContext).CombatLoop();
             // add an endless enemy generation loop, where dead enemies level up and a new enemy is generated
             //when the enemy list ends.
 

@@ -323,6 +323,9 @@ namespace WebProject.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("ArmorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("CharacterType")
                         .HasColumnType("int");
 
@@ -348,6 +351,9 @@ namespace WebProject.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
+
+                    b.Property<int?>("WeaponId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static WebProject.Common.EntityValidations;
+
 
 namespace WebProject.Data.Models
 {
@@ -9,22 +11,22 @@ namespace WebProject.Data.Models
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(10)]
+        [MaxLength(ItemNameMaxLength)]
 
         public string ItemName { get; set; } = null!;
 
         // dice roll adding mechanic for damage?
 
         
-        [Range(-5, 10)]
+        [Range(ItemMinDamage, ItemMaxDamage)]
         public int? DamagePoints { get; set; }
 
         
-        [Range(1, 2)]
+        
 
-        public double? CritModifier { get; set; } = 1;
+        public int? StrengthModifier { get; set; }
 
-        [Range(1, 30)]
+        [Range(ItemMinHealth, ItemMaxHealth)]
 
         public int? HealthPoints { get; set; }
 

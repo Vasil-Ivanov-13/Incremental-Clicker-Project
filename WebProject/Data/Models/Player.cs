@@ -21,7 +21,7 @@ public class Player
     public int Hitpoints { get; set; }
 
     [Required]
-    public int DamagePoints { get; set; }
+    public int Strength { get; set; } = 1;
 
     [Required]
     public int Level { get; set; } = 1;
@@ -31,10 +31,6 @@ public class Player
 
     [Required]
     public int Gold { get; set; } = 0;
-
-    [Required]
-    //is this used?
-    public bool IsAlive { get; set; } = true;
 
     public virtual ICollection<Item> Items { get; set; } = new List<Item>();
 
