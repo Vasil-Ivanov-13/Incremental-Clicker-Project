@@ -11,14 +11,25 @@ namespace WebProject
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = 
-                builder.Configuration.GetConnectionString("DefaultConnection") 
+            var connectionString =
+                builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' doesn't exist.");
             builder.Services.AddDbContext<WebProjectDbContext>(options =>
                 options.UseSqlServer(connectionString));
-          //  builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-      
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            //  builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+                {
+                   
+                    options.SignIn.RequireConfirmedAccount = false;
+                    //removing most password requirements.
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredUniqueChars = 1;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequiredLength = 4;
+                })
                 .AddEntityFrameworkStores<WebProjectDbContext>();
             builder.Services.AddControllersWithViews();
 

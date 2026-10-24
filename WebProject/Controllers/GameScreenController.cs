@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.EntityFrameworkCore;
 using WebProject.Data.Models;
 using WebProject.Services;
 
@@ -9,13 +7,13 @@ namespace WebProject.Controllers
     public class GameScreenController : Controller
     {
         private readonly WebProjectDbContext dbContext;
-        
+
         public GameScreenController(WebProjectDbContext context)
         {
             dbContext = context;
-            
+
         }
-        
+
         public IActionResult Index()
         {
             return View();
