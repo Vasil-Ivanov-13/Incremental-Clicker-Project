@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using WebProject.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebProject.Data.Models;
+using WebProject.Services;
 namespace WebProject.Controllers
 {
     public class ShopController : Controller
@@ -8,7 +10,7 @@ namespace WebProject.Controllers
 
 
         private readonly WebProjectDbContext dbContext;
-        //private readonly CraftItemMode crafter; 
+        
         public ShopController(WebProjectDbContext context)
         {
             dbContext = context;
@@ -36,29 +38,34 @@ namespace WebProject.Controllers
         Is that a good approach? Add Inventory model with list of item slots. Relation to player with id fk, 1-1. 
         But then the calculations get more complicated from model to model.
         */
+        [Authorize]
         public IActionResult CraftItem1()
         {
             
             return View();
         }
-
+        [Authorize]
         public IActionResult CraftItem2()
         {
 
             return View();
         }
-
+        [Authorize]
         public IActionResult UpgradeDamage()
         {
-            new ShopService(dbContext).BuyDamageUpgrade();
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            new ShopService(dbContext).BuyDamageUpgrade(userId);
             return RedirectToAction("Index");
         }
-
+        [Authorize]
         public IActionResult UpgradeHealth()
         {
-
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            new ShopService(dbContext).BuyHealthUpgrade(userId);
 
             return RedirectToAction("Index");
         }
+
+        
     }
 }

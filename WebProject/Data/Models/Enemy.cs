@@ -17,8 +17,9 @@ namespace WebProject.Data.Models
         public int Level { get; set; } = 1;
 
         [Required]
-
         public bool IsAlive { get; set; } = true;
+
+
 
     }
 }

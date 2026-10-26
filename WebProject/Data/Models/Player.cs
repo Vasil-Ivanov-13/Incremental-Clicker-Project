@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using WebProject.Data.Enums;
 namespace WebProject.Data.Models;
 using static Common.EntityValidations;
@@ -32,23 +34,11 @@ public class Player
     [Required]
     public int Gold { get; set; } = 0;
 
-    public virtual ICollection<Item> Items { get; set; } = new List<Item>();
-
-    public int? WeaponId { get; set; }
-    public int? ArmorId { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    [Required]
+    [ForeignKey(nameof(User))]
+    public string UserId { get; set; } = null!;
+    public virtual WeaponItem? WeaponItem { get; set; }
+    public virtual ArmourItem? ArmourItem { get; set; }
+    public virtual ApplicationUser User { get; set; } = null!;
 
 }

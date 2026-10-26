@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static WebProject.Common.EntityValidations;
-
-
 namespace WebProject.Data.Models
+
 {
-    public class Item
+    public class ArmourItem
     {
         [Key]
         public int Id { get; set; }
@@ -15,17 +14,6 @@ namespace WebProject.Data.Models
 
         public string ItemName { get; set; } = null!;
 
-        // dice roll adding mechanic for damage?
-
-        
-        [Range(ItemMinDamage, ItemMaxDamage)]
-        public int? DamagePoints { get; set; }
-
-        
-        
-
-        public int? StrengthModifier { get; set; }
-
         [Range(ItemMinHealth, ItemMaxHealth)]
 
         public int? HealthPoints { get; set; }
@@ -34,5 +22,6 @@ namespace WebProject.Data.Models
         public int PlayerId { get; set; }
 
         public virtual Player? Player { get; set; }
+
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebProject.Data.Models;
+using WebProject.Services;
 
 namespace WebProject
 {
@@ -18,7 +19,7 @@ namespace WebProject
                 options.UseSqlServer(connectionString));
             //  builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
                 {
                    
                     options.SignIn.RequireConfirmedAccount = false;
@@ -32,6 +33,9 @@ namespace WebProject
                 })
                 .AddEntityFrameworkStores<WebProjectDbContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<PlayerService>();
+            builder.Services.AddScoped<CombatService>();
+            builder.Services.AddScoped<ShopService>();
 
             var app = builder.Build();
 

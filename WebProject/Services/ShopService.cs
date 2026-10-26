@@ -11,11 +11,9 @@ namespace WebProject.Services
             this.dbContext = context;
         }
 
-        public void BuyDamageUpgrade()
+        public void BuyDamageUpgrade(string userId)
         {
-            int playerId = dbContext.Players.First().Id;
-
-            Player currentPlayer = dbContext.Players.First(p => p.Id == playerId);
+            Player currentPlayer = dbContext.Players.First(p => p.UserId == userId);
 
             currentPlayer.Gold -= 100;
             currentPlayer.Strength += 1;
@@ -24,11 +22,9 @@ namespace WebProject.Services
 
         }
 
-        public void BuyHealthUpgrade()
+        public void BuyHealthUpgrade(string userId)
         {
-            int playerId = dbContext.Players.First().Id;
-
-            Player currentPlayer = dbContext.Players.First(p => p.Id == playerId);
+            Player currentPlayer = dbContext.Players.First(p => p.UserId == userId);
 
             currentPlayer.Gold -= 50;
             currentPlayer.Hitpoints += 20;
