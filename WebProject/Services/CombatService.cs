@@ -49,6 +49,7 @@ namespace WebProject.Services
                 if (currentPlayer.WeaponItem != null)
                 {
                     playerDamage = currentPlayer.WeaponItem.DamagePoints;
+                    playerStrength += currentPlayer.WeaponItem.StrengthModifier;
                 }
 
                 //Player stats end
