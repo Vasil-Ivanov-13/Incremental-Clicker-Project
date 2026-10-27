@@ -3,22 +3,24 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebProject.Data.Models;
 using WebProject.Services;
+using WebProject.ViewModels;
 
 namespace WebProject.Controllers
 {
-    public class GameScreenController : Controller
+    public class GameScreenController : StartController
     {
         private readonly PlayerService playerService;
 
         private readonly CombatService combat;
 
-        public GameScreenController(PlayerService userService, CombatService combat)
+        public GameScreenController(PlayerService playerService, CombatService combat)
         {
            
-            this.playerService = userService;
+            this.playerService = playerService;
             this.combat = combat;
 
         }
+        
          
         public IActionResult Index()
         {
@@ -30,11 +32,11 @@ namespace WebProject.Controllers
         public IActionResult Combat()
         {
 
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new InvalidOperationException("No logged in user found.");
+            
           
             if (!playerService.UserHasCharacter(userId))
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("CreatePlayer");
             }
             combat.CombatLoop(userId);
             // add an endless enemy generation loop, where dead enemies level up and a new enemy is generated
@@ -43,6 +45,28 @@ namespace WebProject.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
+        [HttpGet]
+        public IActionResult CreatePlayer()
+        {
+            if (playerService.UserHasCharacter(userId))
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(new CreatePlayerViewModel());
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult CreatePlayer(CreatePlayerViewModel model)
+        {
+            if(!ModelState.IsValid) return View(model);
+
+            playerService.CreateCharacter(userId, model);
+
+            return RedirectToAction("Index");
+        }
 
     }
 }

@@ -4,7 +4,7 @@ using WebProject.ViewModels;
 
 namespace WebProject.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : StartController
     {
         private readonly ILogger<HomeController> _logger;
 

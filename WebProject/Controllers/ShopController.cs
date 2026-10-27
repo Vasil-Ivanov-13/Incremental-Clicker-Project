@@ -3,19 +3,17 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebProject.Data.Models;
 using WebProject.Services;
+using WebProject.ViewModels;
 namespace WebProject.Controllers
 {
-    public class ShopController : Controller
+    public class ShopController : StartController
     {
-
-
-        private readonly WebProjectDbContext dbContext;
-        
-        public ShopController(WebProjectDbContext context)
+        private readonly ShopService shopService;
+        private readonly PlayerService playerService;
+        public ShopController(ShopService shopService, PlayerService playerService )
         {
-            dbContext = context;
-            
-
+            this.shopService = shopService;
+            this.playerService = playerService;
         }
         public IActionResult Index()
         {
@@ -39,29 +37,59 @@ namespace WebProject.Controllers
         But then the calculations get more complicated from model to model.
         */
         [Authorize]
-        public IActionResult CraftItem1()
+        [HttpGet]
+        public IActionResult CraftWeapon()
         {
-            
-            return View();
+            if (!playerService.UserHasCharacter(userId))
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(new CraftWeaponViewModel());
         }
         [Authorize]
-        public IActionResult CraftItem2()
+        [HttpPost]
+        public IActionResult CraftWeapon(CraftWeaponViewModel model)
         {
+            if (!ModelState.IsValid) return View(model);
 
-            return View();
+            shopService.CraftWeapon(userId, model);
+
+            return RedirectToAction("Index");
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult CraftArmour()
+        {
+            if (!playerService.UserHasCharacter(userId))
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(new CraftArmourViewModel());
+        }
+        [Authorize]
+        [HttpPost]
+        public IActionResult CraftArmour(CraftArmourViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            shopService.CraftArmour(userId, model);
+
+            return RedirectToAction("Index");
         }
         [Authorize]
         public IActionResult UpgradeDamage()
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            new ShopService(dbContext).BuyDamageUpgrade(userId);
+            
+            shopService.BuyDamageUpgrade(userId);
             return RedirectToAction("Index");
         }
         [Authorize]
         public IActionResult UpgradeHealth()
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            new ShopService(dbContext).BuyHealthUpgrade(userId);
+           
+            shopService.BuyHealthUpgrade(userId);
 
             return RedirectToAction("Index");
         }

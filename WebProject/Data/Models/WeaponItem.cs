@@ -13,8 +13,6 @@ namespace WebProject.Data.Models
         [Required]
         [MaxLength(ItemNameMaxLength)]
         public string ItemName { get; set; } = null!;
-
-        [Range(ItemMinDamage, ItemMaxDamage)]
         public int? DamagePoints { get; set; }
         public int? StrengthModifier { get; set; }
 

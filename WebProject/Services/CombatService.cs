@@ -100,11 +100,11 @@ namespace WebProject.Services
                         if (currentPlayer.Experience >= currentPlayer.Level * 10)
                         {
                             currentPlayer.Experience = playerExperience - (currentPlayer.Level * 10);
-
+                            currentPlayer.Hitpoints += 10 * playerLevel;
                             currentPlayer.Level += 1;
 
                             playerLevel += 1; // updating local
-                            currentPlayer.Hitpoints += 10 * playerLevel;
+                           
                             
 
                             
@@ -126,7 +126,7 @@ namespace WebProject.Services
                     if (playerHitpoints <= 0)
                     {
                         resultStringList.Add($"{playerName} was nearly killed...");
-                        currentPlayer.Gold += (enemyLevel * 5);
+                        currentPlayer.Gold += (enemyLevel);
                         resultStringList.Add($"{playerName} managed to escape.");
                         //player dead, less gold, no xp, message
                         dbContext.SaveChanges();

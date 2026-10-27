@@ -1,0 +1,27 @@
+﻿@using WebProject.Data.Enums
+@model CreatePlayerViewModel
+@{
+    <form method="post">
+    <div class="row">
+    <label class="col-form-label">Name Your Character:</label>
+    </div>
+    <div class="col">
+    <input class="form-control" asp-for="Name" />
+    <span asp-validation-for="Name" class="text-danger"></span>
+    <div 
+    class="col">
+    <label class="col-form-label">Select Profession:</label>
+    <select 
+    asp-for="CharacterClass"
+    asp-items="Html.GetEnumSelectList<ClassEnums>()"
+    class="form-select"></select>
+    <span asp-validation-for="CharacterClass" class="text-danger"></span>
+    <div>
+
+    </div>
+    <div class="">
+    <button type="submit" class="btn btn-warning">Submit</button>
+    </div>
+    
+    </form>
+}
