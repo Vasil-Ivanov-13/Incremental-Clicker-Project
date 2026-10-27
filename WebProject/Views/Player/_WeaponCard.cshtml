@@ -1,0 +1,16 @@
+﻿@model ShowWeaponViewModel
+
+<div class="card h-100">
+    <div class="card-header">Weapon</div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">@Html.DisplayNameFor(m => m.Name): @Model.Name</li>
+        <li class="list-group-item">@Html.DisplayNameFor(m => m.WeaponDamage): @Model.WeaponDamage</li>
+        <li class="list-group-item">@Html.DisplayNameFor(m => m.WeaponStrength): @Model.WeaponStrength</li>
+    </ul>
+    <div class="card-footer">
+        <form asp-controller="Shop" asp-action="RemoveWeapon" method="post" class="d-inline"
+              onsubmit="return confirm('Remove your weapon?');">
+            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+        </form>
+    </div>
+</div>

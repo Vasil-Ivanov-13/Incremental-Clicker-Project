@@ -16,7 +16,7 @@ namespace WebProject.Data.Models
 
         [Range(ItemMinHealth, ItemMaxHealth)]
 
-        public int? HealthPoints { get; set; }
+        public int HealthPoints { get; set; }
 
         [ForeignKey(nameof(Player))]
         public int PlayerId { get; set; }

@@ -1,16 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using WebProject.Data.Models;
-using WebProject.Services;
+using WebProject.Services.Interfaces;
 using WebProject.ViewModels;
 namespace WebProject.Controllers
 {
     public class ShopController : StartController
     {
-        private readonly ShopService shopService;
-        private readonly PlayerService playerService;
-        public ShopController(ShopService shopService, PlayerService playerService )
+        private readonly IShopService shopService;
+        private readonly IPlayerService playerService;
+        public ShopController(IShopService shopService, IPlayerService playerService )
         {
             this.shopService = shopService;
             this.playerService = playerService;
@@ -19,23 +17,7 @@ namespace WebProject.Controllers
         {
             return View();
         }
-        /* post method to handle item crafting. Get method to display the crafting page.
-         (with options and drawdown menu that logically builds items according to slots.
-
-         How to deal with an item slot being taken? Add them to the player model?
-         Or web validation that something exists in that "slot" and if it is taken allow removal.
-        
-        !!!Leaning towards player model having individual properties per item slot.
-        View would pull the items and display them if not null.
-        When null, allow crafting. When not, allow removal.(returning portion of cost)
-
-        If player has an item slot filled, their total values will be modified with item values in db.
-
-        If item removed, total item values will be subtracted.
-
-        Is that a good approach? Add Inventory model with list of item slots. Relation to player with id fk, 1-1. 
-        But then the calculations get more complicated from model to model.
-        */
+     
         [Authorize]
         [HttpGet]
         public IActionResult CraftWeapon()
@@ -51,11 +33,19 @@ namespace WebProject.Controllers
         [HttpPost]
         public IActionResult CraftWeapon(CraftWeaponViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-            shopService.CraftWeapon(userId, model);
+            if (!shopService.CraftWeapon(userId, model))
+            {
+                ModelState.AddModelError(string.Empty, "Not enough gold, or you already have a weapon.");
+                return View(model);
+            }
 
-            return RedirectToAction("Index");
+            TempData["Success"] = "Weapon crafted!";
+            return RedirectToAction("PlayerDetails", "Player");
         }
         [Authorize]
         [HttpGet]
@@ -72,28 +62,64 @@ namespace WebProject.Controllers
         [HttpPost]
         public IActionResult CraftArmour(CraftArmourViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-            shopService.CraftArmour(userId, model);
+            if (!shopService.CraftArmour(userId, model))
+            {
+                ModelState.AddModelError(string.Empty, "Not enough gold, or you already have armor.");
+                return View(model);
+            }
 
-            return RedirectToAction("Index");
+            TempData["Success"] = "Armour crafted!";
+            return RedirectToAction("PlayerDetails","Player");
         }
         [Authorize]
         public IActionResult UpgradeDamage()
         {
+            if (!shopService.BuyDamageUpgrade(userId))
+            {
+                TempData["Error"] = "Not enough gold.";
+            }
             
-            shopService.BuyDamageUpgrade(userId);
             return RedirectToAction("Index");
         }
         [Authorize]
         public IActionResult UpgradeHealth()
         {
-           
-            shopService.BuyHealthUpgrade(userId);
+            if (!shopService.BuyHealthUpgrade(userId))
+            {
+                TempData["Error"] = "Not enough gold.";
+            }
 
             return RedirectToAction("Index");
         }
+        [Authorize]
+        [HttpPost]
+        public IActionResult RemoveWeapon()
+        {
+            if (shopService.RemoveWeapon(userId))
+            {
+                TempData["Success"] = "Weapon removed.";
+            }
 
-        
+            return RedirectToAction("CraftWeapon");
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult RemoveArmour()
+        {
+            if (shopService.RemoveArmour(userId))
+            {
+                TempData["Success"] = "Armour removed.";
+            }
+
+            return RedirectToAction("CraftArmour");
+        }
+
+
     }
 }

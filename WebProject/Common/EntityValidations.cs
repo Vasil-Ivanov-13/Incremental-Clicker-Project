@@ -7,31 +7,31 @@
         //Player Validations
 
         public const int PlayerNameMaxLength = 15;
-        public const int PlayerNameMinLength = 3;
+        public const int PlayerNameMinLength = 2;
 
         //Player Validations End
 
         //Class stat Validations Start
 
         public const int WarriorHealth = 100;
-        public const int WarriorStrength = 1;
+        public const int WarriorStrength = 2;
         public const int RogueHealth = 70;
-        public const int RogueStrength = 2;
+        public const int RogueStrength = 3;
         public const int BasicHealth = 50;
-        public const int BasicStrength = 1;
+        public const int BasicStrength = 2;
         //Class stat Validations End
 
         //Item Validations Start
 
-        public const int ItemNameMaxLength = 20;
+        public const int ItemNameMaxLength = 15;
         public const int ItemNameMinLength = 2;
 
         public const int ItemMaxDamage = 10;
 
-        public const int ItemMinDamage = -5;
+        public const int ItemMinDamage = -2;
 
         public const int ItemStrengthModifierMinValue = 0;
-        public const int ItemStrengthModifierMaxValue = 2;
+        public const int ItemStrengthModifierMaxValue = 3;
 
 
         public const int WeaponCost = 100;

@@ -13,8 +13,8 @@ namespace WebProject.Data.Models
         [Required]
         [MaxLength(ItemNameMaxLength)]
         public string ItemName { get; set; } = null!;
-        public int? DamagePoints { get; set; }
-        public int? StrengthModifier { get; set; }
+        public int DamagePoints { get; set; }
+        public int StrengthModifier { get; set; }
 
         [ForeignKey(nameof(Player))]
         public int PlayerId { get; set; }

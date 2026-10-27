@@ -1,13 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Configuration.UserSecrets;
-using System.Reflection.Metadata.Ecma335;
+﻿using Microsoft.EntityFrameworkCore;
 using WebProject.Data.Models;
+using WebProject.Services.Interfaces;
 using WebProject.ViewModels;
 using static WebProject.Common.EntityValidations;
 
 namespace WebProject.Services
 {
-    public class PlayerService
+    public class PlayerService : IPlayerService
     {
         private readonly WebProjectDbContext dbContext;
         public PlayerService(WebProjectDbContext context)
@@ -63,12 +62,13 @@ namespace WebProject.Services
             };
 
             dbContext.Players.Add(player);
+            dbContext.Enemies.RemoveRange(dbContext.Enemies);
             dbContext.SaveChanges();
 
 
 
         }
-        //TODO
+        
         public void RemoveCharacter(string userId)
         {
             Player currentPlayer = dbContext.Players.First(p => p.UserId == userId);
@@ -93,5 +93,50 @@ namespace WebProject.Services
             dbContext.SaveChanges();
             //to validate on other end for string data.
         }
+
+        public PlayerStatsViewModel GetStatusPage(string userId)
+        {
+            Player player = dbContext.Players
+        .Include(p => p.WeaponItem)
+        .Include(p => p.ArmourItem)
+        .First(p => p.UserId == userId);
+
+
+            PlayerStatsViewModel statusPage = new()
+            {
+                Player = new ShowPlayerViewModel
+                {
+                    Name = player.Name,
+                    CharacterClass = player.CharacterType,
+                    PlayerHealth = player.Hitpoints,
+                    PlayerStrength = player.Strength,
+                    PlayerLevel = player.Level,
+                    PlayerExperience = player.Experience,
+                    PlayerGold = player.Gold
+                }
+            };
+
+            if (player.WeaponItem != null)
+            {
+                statusPage.Weapon = new ShowWeaponViewModel
+                {
+                    Name = player.WeaponItem.ItemName,
+                    WeaponDamage = player.WeaponItem.DamagePoints,
+                    WeaponStrength = player.WeaponItem.StrengthModifier
+                };
+            }
+
+            if (player.ArmourItem != null)
+            {
+                statusPage.Armour = new ShowArmourViewModel
+                {
+                    Name = player.ArmourItem.ItemName,
+                    ArmourHealth = player.ArmourItem.HealthPoints
+                };
+            }
+
+            return statusPage;
+        }
     }
+    
 }

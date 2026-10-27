@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using WebProject.Data.Configurations;
+
 namespace WebProject.Data.Models
 {
     public class WebProjectDbContext : IdentityDbContext<ApplicationUser>
@@ -42,12 +41,6 @@ namespace WebProject.Data.Models
                 .WithOne(p => p.User)
                 .HasForeignKey<Player>(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-
-
-
-
-            modelBuilder.ApplyConfiguration(new EnemyConfiguration());
-
 
         }
 

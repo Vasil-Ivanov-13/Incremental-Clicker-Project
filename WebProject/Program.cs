@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebProject.Data.Models;
 using WebProject.Services;
+using WebProject.Services.Interfaces;
 
 namespace WebProject
 {
@@ -14,7 +14,7 @@ namespace WebProject
             // Add services to the container.
             var connectionString =
                 builder.Configuration.GetConnectionString("DefaultConnection")
-                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' doesn't exist.");
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<WebProjectDbContext>(options =>
                 options.UseSqlServer(connectionString));
             //  builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -33,9 +33,9 @@ namespace WebProject
                 })
                 .AddEntityFrameworkStores<WebProjectDbContext>();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<PlayerService>();
-            builder.Services.AddScoped<CombatService>();
-            builder.Services.AddScoped<ShopService>();
+            builder.Services.AddScoped<IPlayerService, PlayerService>();
+            builder.Services.AddScoped<ICombatService, CombatService>();
+            builder.Services.AddScoped<IShopService, ShopService>();
 
             var app = builder.Build();
 
@@ -47,7 +47,6 @@ namespace WebProject
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 

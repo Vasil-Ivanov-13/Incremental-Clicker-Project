@@ -1,10 +1,10 @@
-﻿using Microsoft.Identity.Client;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore;
 using WebProject.Data.Models;
+using WebProject.Services.Interfaces;
 
 namespace WebProject.Services
 {
-    public class CombatService 
+    public class CombatService : ICombatService
     {
         private readonly WebProjectDbContext dbContext;
         
@@ -13,40 +13,44 @@ namespace WebProject.Services
             this.dbContext = context;
            
         }
-
-
-        /* 
-           player stats to be determined by starting class, way to choose starting class on sign up.
-           enemy stats to be determined by lvl, and updated on player defeating the list of monsters.
-           have images tied to names of enemies, determined randomly?
-         
-         
-         
-         */
         public List<string> CombatLoop(string userId)
         {
             //List of strings to be represented in the view, something like a combat log.
             List<string> resultStringList = new List<string>();
-
+            Player currentPlayer = dbContext.Players
+                    .Include(p => p.WeaponItem)
+                    .Include(p => p.ArmourItem)
+                    .First(p => p.UserId == userId);
+            int playerLevel = currentPlayer.Level;
             //check if there is an enemy at all.
             if (dbContext.Enemies.Any(e => e.IsAlive))
             {
                 //Player stats start                
 
-                Player currentPlayer = 
-                    dbContext.Players
-                    .First(p => p.UserId == userId);
                 
-                int playerHitpoints = currentPlayer.Hitpoints;
 
-                int playerDamage = 0;
+                int? playerHitpoints = currentPlayer.Hitpoints;
+
+                if(currentPlayer.ArmourItem != null)
+                {
+                    playerHitpoints += currentPlayer.ArmourItem.HealthPoints;
+                }
 
                 string playerName = currentPlayer.Name;
                 
                 int playerExperience = currentPlayer.Experience;
           
-                int playerLevel = currentPlayer.Level;
-              
+                
+
+                int playerStrength = currentPlayer.Strength;
+
+                int playerDamage = 0;
+
+                if (currentPlayer.WeaponItem != null)
+                {
+                    playerDamage = currentPlayer.WeaponItem.DamagePoints;
+                }
+
                 //Player stats end
 
 
@@ -54,7 +58,7 @@ namespace WebProject.Services
 
                 Enemy currentEnemy = dbContext.Enemies
                     .Where(e => e.IsAlive)
-                    .OrderByDescending(e => e.Id)
+                    .OrderBy(e => e.Id)
                     .First();
 
 
@@ -67,22 +71,16 @@ namespace WebProject.Services
                 //Enemy stats end
 
                 //Combat loop start
+                int playerInstanceDamage = 0;
 
                 while (true)
                 {
-                    // Dice Rolls for player strength to determine player damage. 
-                    //TODO add item calculations!!!
-                    for (int i = 0; i < currentPlayer.Strength; i++)
-                    {
-                        playerDamage += Random.Shared.Next(1,7);       
-                    }
-
-                    enemyHitpoints -= playerDamage;
-
-                    resultStringList.Add($"Enemy was dealt {playerDamage} damage by {playerName}.");
+                    playerInstanceDamage = playerDamage + PlayerDealDamage(playerStrength);
                     
-                    //resetting player damage so new dice rolls can be clean.
-                    playerDamage = 0;
+                    enemyHitpoints -= playerInstanceDamage;
+
+                    resultStringList.Add($"Enemy was dealt {playerInstanceDamage} damage by {playerName}.");
+                    
 
                     if (enemyHitpoints <= 0)
                     {
@@ -111,7 +109,7 @@ namespace WebProject.Services
                             resultStringList.Add($"{playerName} leveled up to level {playerLevel}!");
                             resultStringList.Add($"{playerName}'s stats increased!");
 
-                            currentPlayer.Experience = playerExperience ;
+                            
 
                         }
 
@@ -146,10 +144,14 @@ namespace WebProject.Services
                 //That will happen with random class after some balancing math is done.Not urgent.
                 //Enemy stats will be generated based on enemy level.
                 resultStringList.Add("No enemy available for combat. Going deeper...");
-                foreach (Enemy e in dbContext.Enemies)
+
+                dbContext.Enemies.RemoveRange(dbContext.Enemies);
+                for (int i = 0; i < 5; i++)
                 {
-                    e.IsAlive = true;
-                    e.Level += 1;
+                   Enemy enemy = GenerateEnemy(playerLevel, i);
+                    dbContext.Enemies.Add(enemy);
+
+
                 }
 
                 dbContext.SaveChanges();
@@ -159,6 +161,33 @@ namespace WebProject.Services
 
             
         }
+        private int PlayerDealDamage(int strength)
+        {
+            int damage = 0;
+            for (int i = 0; i < strength; i++)
+            {
+                damage += Random.Shared.Next(1, 7);
+            }
+
+
+
+            return damage;
+        }
+
+        private Enemy GenerateEnemy(int playerLevel, int iterator)
+        {
+            int enemyLevel = Random.Shared.Next(1, playerLevel + iterator);
+            Enemy genEnemy = new()
+            {
+                Level = enemyLevel,
+                DamagePoints = playerLevel + enemyLevel,
+                Hitpoints = 10 + enemyLevel * 10,
+                IsAlive = true,
+
+            };
+            return genEnemy;
+        }
+
 
     }
 }

@@ -1,0 +1,42 @@
+﻿@model PlayerStatsViewModel
+<h1>Character</h1>
+
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <partial name="_PlayerCard" model="Model.Player" />
+    </div>
+
+    <div class="col-md-4 mb-3">
+        @if (Model.Weapon != null)
+        {
+            <partial name="_WeaponCard" model="Model.Weapon" />
+        }
+        else
+        {
+            <div class="card h-100">
+                <div class="card-header">Weapon</div>
+                <div class="card-body">
+                    <p class="text-muted">No weapon equipped.</p>
+                    <a asp-controller="Shop" asp-action="CraftWeapon" class="btn btn-sm btn-warning">Craft one</a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4 mb-3">
+        @if (Model.Armour != null)
+        {
+            <partial name="_ArmourCard" model="Model.Armour" />
+        }
+        else
+        {
+            <div class="card h-100">
+                <div class="card-header">Armour</div>
+                <div class="card-body">
+                    <p class="text-muted">No armour equipped.</p>
+                    <a asp-controller="Shop" asp-action="CraftArmour" class="btn btn-sm btn-warning">Craft one</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

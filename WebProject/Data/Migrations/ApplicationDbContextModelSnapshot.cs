@@ -232,13 +232,13 @@ namespace WebProject.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("HealthPoints")
+                    b.Property<int>("HealthPoints")
                         .HasColumnType("int");
 
                     b.Property<string>("ItemName")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
@@ -274,40 +274,6 @@ namespace WebProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Enemies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DamagePoints = 2,
-                            Hitpoints = 10,
-                            IsAlive = true,
-                            Level = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DamagePoints = 3,
-                            Hitpoints = 15,
-                            IsAlive = true,
-                            Level = 2
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DamagePoints = 4,
-                            Hitpoints = 20,
-                            IsAlive = true,
-                            Level = 3
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DamagePoints = 5,
-                            Hitpoints = 40,
-                            IsAlive = true,
-                            Level = 4
-                        });
                 });
 
             modelBuilder.Entity("WebProject.Data.Models.Player", b =>
@@ -361,18 +327,18 @@ namespace WebProject.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("DamagePoints")
+                    b.Property<int>("DamagePoints")
                         .HasColumnType("int");
 
                     b.Property<string>("ItemName")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("StrengthModifier")
+                    b.Property<int>("StrengthModifier")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

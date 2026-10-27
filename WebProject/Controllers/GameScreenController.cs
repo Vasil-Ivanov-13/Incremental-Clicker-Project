@@ -1,27 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using WebProject.Data.Models;
-using WebProject.Services;
-using WebProject.ViewModels;
+using WebProject.Services.Interfaces;
+
 
 namespace WebProject.Controllers
 {
     public class GameScreenController : StartController
     {
-        private readonly PlayerService playerService;
+        private readonly ICombatService combat;
+        private readonly IPlayerService playerService;
 
-        private readonly CombatService combat;
-
-        public GameScreenController(PlayerService playerService, CombatService combat)
+        public GameScreenController(ICombatService combat, IPlayerService playerService)
         {
-           
-            this.playerService = playerService;
             this.combat = combat;
-
-        }
-        
-         
+            this.playerService = playerService;
+        }  
         public IActionResult Index()
         {
             
@@ -38,34 +31,11 @@ namespace WebProject.Controllers
             {
                 return RedirectToAction("CreatePlayer");
             }
-            combat.CombatLoop(userId);
+            List<string> combatLog = combat.CombatLoop(userId);
             // add an endless enemy generation loop, where dead enemies level up and a new enemy is generated
             //when the enemy list ends.
 
-            return RedirectToAction("Index");
-        }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult CreatePlayer()
-        {
-            if (playerService.UserHasCharacter(userId))
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View(new CreatePlayerViewModel());
-        }
-
-        [Authorize]
-        [HttpPost]
-        public IActionResult CreatePlayer(CreatePlayerViewModel model)
-        {
-            if(!ModelState.IsValid) return View(model);
-
-            playerService.CreateCharacter(userId, model);
-
-            return RedirectToAction("Index");
+            return View(combatLog);
         }
 
     }

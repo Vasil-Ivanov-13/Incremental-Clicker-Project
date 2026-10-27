@@ -1,23 +1,22 @@
 ﻿@model CraftWeaponViewModel
 @{
-
-
-    <legend>Create Weapon</legend>
-    <form method="post">
-        <div class="row">
-            <label class="col-form-label">Name Your Weapon:</label>
-        </div>
-        <div class="col">
-            <input class="form-control" asp-for="ItemName" />
-            <span asp-validation-for="ItemName" class="text-danger"></span>
-        </div>
-        <div class="">
-            <button type="submit" class="btn btn-warning">Submit</button>
-        </div>
-    </form>
-
-  
+    ViewData["Title"] = "Weapon Forge";
 }
+
+<legend>Create Weapon</legend>
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="ItemName" class="form-label">Name Your Weapon:</label>
+        <input asp-for="ItemName" class="form-control" />
+        <span asp-validation-for="ItemName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-warning">Submit</button>
+</form>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
