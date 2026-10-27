@@ -8,6 +8,7 @@ namespace WebProject.Data.Enums
         Basic = 0,
         [Display(Name = "Warrior", Description = "Sturdy fighter.")]
         Warrior = 1,
+        [Display(Name = "Rogue", Description = "Shady fighter.")]
         Rogue = 2,
     }
 }

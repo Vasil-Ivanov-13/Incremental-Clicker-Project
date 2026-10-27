@@ -83,7 +83,7 @@ namespace WebProject.Services
             }
             dbContext.Players.Remove(currentPlayer);
             dbContext.SaveChanges();
-            //check if the playerid value is removed auto from the users table later, could be a bug
+
         }
 
         public void RenameCharacter(string userId, string rename)
@@ -91,7 +91,7 @@ namespace WebProject.Services
             Player currentPlayer = dbContext.Players.First(p => p.UserId == userId);
             currentPlayer.Name = rename;
             dbContext.SaveChanges();
-            //to validate on other end for string data.
+
         }
 
         public PlayerStatsViewModel GetStatusPage(string userId)

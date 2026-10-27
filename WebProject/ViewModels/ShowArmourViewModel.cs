@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using WebProject.Data.Enums;
 
 namespace WebProject.ViewModels
 {

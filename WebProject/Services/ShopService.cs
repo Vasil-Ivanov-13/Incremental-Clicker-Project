@@ -146,6 +146,7 @@ namespace WebProject.Services
             }
 
         }
+        //Not Implemented in controllers and views.
         public bool RenameWeapon(string userId, string itemRename)
         {
             Player currentPlayer = dbContext.Players.Include(p => p.WeaponItem).First(p => p.UserId == userId);
@@ -161,6 +162,7 @@ namespace WebProject.Services
                 return true;
             }
         }
+        //Not Implemented in controllers and views.
         public bool RenameArmour(string userId, string itemRename)
         {
             Player currentPlayer = dbContext.Players.Include(p => p.ArmourItem).First(p => p.UserId == userId);

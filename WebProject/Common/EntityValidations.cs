@@ -2,8 +2,6 @@
 {
     public static class EntityValidations
     {
-        //TODO 
-
         //Player Validations
 
         public const int PlayerNameMaxLength = 15;
@@ -43,14 +41,14 @@
 
         //Item Validations End
 
-        //Stat Shop Validation
+        //Stat Shop Validation Start
 
         public const int DamageCost = 100;
         public const int HealthCost = 70;
         public const int StrengthIncrement = 1;
         public const int HealthIncrement = 15;
 
-
+        //Stat Shop Validation End
 
 
     }

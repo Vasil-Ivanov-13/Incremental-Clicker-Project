@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.CodeAnalysis;
 using WebProject.Data.Enums;
 namespace WebProject.Data.Models;
 using static Common.EntityValidations;

@@ -140,13 +140,10 @@ namespace WebProject.Services
             }
             else
             {
-                //Going deeper would mean adding another enemy to the list.
-                //That will happen with random class after some balancing math is done.Not urgent.
-                //Enemy stats will be generated based on enemy level.
                 resultStringList.Add("No enemy available for combat. Going deeper...");
 
                 dbContext.Enemies.RemoveRange(dbContext.Enemies);
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 3; i++)
                 {
                    Enemy enemy = GenerateEnemy(playerLevel, i);
                     dbContext.Enemies.Add(enemy);
@@ -180,8 +177,8 @@ namespace WebProject.Services
             Enemy genEnemy = new()
             {
                 Level = enemyLevel,
-                DamagePoints = playerLevel + enemyLevel,
-                Hitpoints = 10 + enemyLevel * 10,
+                DamagePoints = enemyLevel * 3,
+                Hitpoints = 10 + enemyLevel * 20,
                 IsAlive = true,
 
             };

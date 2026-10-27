@@ -32,8 +32,6 @@ namespace WebProject.Controllers
                 return RedirectToAction("CreatePlayer");
             }
             List<string> combatLog = combat.CombatLoop(userId);
-            // add an endless enemy generation loop, where dead enemies level up and a new enemy is generated
-            //when the enemy list ends.
 
             return View(combatLog);
         }

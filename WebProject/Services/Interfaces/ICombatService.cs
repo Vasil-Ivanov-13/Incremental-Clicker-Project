@@ -1,5 +1,4 @@
-﻿using WebProject.Data.Models;
-
+﻿
 namespace WebProject.Services.Interfaces
 {
     public interface ICombatService
